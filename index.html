@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>The Meetory</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Poppins', Arial, sans-serif;
+    background:#fff5f8;
+    overflow-x:hidden;
+    color:#4a2031;
+    position:relative;
+}
+
+/* BACKGROUND OVERLAY */
+body::before{
+    content:'';
+    position:fixed;
+    inset:0;
+    background:linear-gradient(
+        to bottom,
+        rgba(255,245,248,0.80),
+        rgba(255,245,248,0.92)
+    );
+    z-index:-1;
+}
+
+/* BACKGROUND IMAGE */
+.bg-couple{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:950px;
+    height:950px;
+    background-image:url('https://res.cloudinary.com/dbislv0nl/image/upload/f_auto,q_auto/the-meetory_w8rdy4.png');
+
+    background-size:contain;
+    background-repeat:no-repeat;
+    background-position:center;
+    opacity:0.07;
+    z-index:-2;
+    pointer-events:none;
+}
+
+/* NAVBAR */
+.navbar{
+    width:100%;
+    height:85px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 5%;
+    position:sticky;
+    top:0;
+    z-index:1000;
+    backdrop-filter:blur(14px);
+    background:rgba(255,255,255,0.55);
+    border-bottom:1px solid rgba(255,192,203,0.18);
+}
+
+/* LOGO */
+.logo{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+/* PROFILE PHOTO */
+.profile-photo{
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    overflow:hidden;
+    border:3px solid #ff5f9d;
+    cursor:pointer;
+    box-shadow:0 5px 18px rgba(255,105,180,0.25);
+}
+
+.profile-photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* LOGO TEXT */
+.logo-text{
+    font-size:60px;
+    font-family:'Cormorant Garamond', Georgia, serif;
+    font-weight:700;
+    background:linear-gradient(
+        to right,
+        #8f1d4d,
+        #ff5c9b
+    );
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.heart-icon{
+    color:#ff5c9b;
+}
+
+/* NAV LINKS */
+.nav-links{
+    display:flex;
+    gap:30px;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:#7c4259;
+    font-weight:500;
+    transition:0.3s;
+}
+
+.nav-links a:hover{
+    color:#ff5c9b;
+}
+
+/* HERO */
+.hero{
+    min-height:90vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    text-align:center;
+    padding:50px 20px;
+    position:relative;
+    z-index:2;
+}
+
+.hero img{
+    width:260px;
+    max-width:90%;
+    margin-bottom:25px;
+    filter:drop-shadow(0 10px 20px rgba(255,105,180,0.15));
+}
+
+.hero h2{
+    font-size:65px;
+    line-height:1.1;
+    background:linear-gradient(
+        to right,
+        #ff5c9b,
+        #8a2754
+    );
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    font-family:'Cormorant Garamond', serif;
+}
+
+.hero p{
+    max-width:750px;
+    margin-top:20px;
+    font-size:18px;
+    color:#7b5a68;
+    line-height:1.8;
+}
+
+/* BUTTON */
+.hero button{
+    margin-top:35px;
+    padding:16px 36px;
+    border:none;
+    border-radius:50px;
+    background:linear-gradient(
+        to right,
+        #ff5c93,
+        #c92c6d
+    );
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.4s;
+    box-shadow:0 10px 30px rgba(255,92,147,0.25);
+}
+
+.hero button:hover{
+    transform:translateY(-5px);
+}
+
+/* MAIN */
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+    padding-bottom:80px;
+}
+
+/* GLASS CARDS */
+.post-box,
+.post,
+.profile-card{
+    background:rgba(255,255,255,0.78);
+    backdrop-filter:blur(16px);
+    border:1px solid rgba(255,192,203,0.18);
+    box-shadow:0 10px 40px rgba(0,0,0,0.05);
+}
+
+/* CREATE POST */
+.post-box{
+    border-radius:30px;
+    padding:35px;
+    margin-bottom:50px;
+}
+
+.post-box h3{
+    margin-bottom:20px;
+    color:#b92f66;
+    font-size:28px;
+}
+
+textarea{
+    width:100%;
+    min-height:150px;
+    border:none;
+    outline:none;
+    background:#fff2f6;
+    border-radius:22px;
+    padding:20px;
+    resize:none;
+    font-size:16px;
+    color:#5f3344;
+}
+
+/* NEW: Image Preview Area in Post Box */
+.post-image-preview-wrapper {
+    display: none;
+    margin-top: 15px;
+    position: relative;
+    width: fit-content;
+}
+
+.post-image-preview-wrapper img {
+    max-width: 200px;
+    max-height: 150px;
+    border-radius: 14px;
+    object-fit: cover;
+    border: 2px solid #ffd8e7;
+}
+
+.remove-img-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff5c93;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.post-actions{
+    margin-top:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:15px;
+    width:100%;
+}
+
+.left-actions{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.left-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.char-count{
+    color:#aa6b83;
+}
+
+/* NEW: Add Image Button Styling */
+.add-img-label {
+    padding: 10px 18px;
+    background: #fff2f6;
+    color: #b92f66;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.add-img-label:hover {
+    background: #ffd8e7;
+}
+
+.post-btn{
+    padding:15px 32px;
+    border:none;
+    border-radius:50px;
+    background:linear-gradient(
+        to right,
+        #ff5c93,
+        #c92c6d
+    );
+    color:white;
+    font-size:15px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+/* FEED */
+.feed{
+    display:grid;
+    gap:30px;
+}
+
+.post{
+    border-radius:28px;
+    padding:28px;
+    transition:0.3s;
+}
+
+.post:hover{
+    transform:translateY(-5px);
+}
+
+.post-header{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:18px;
+}
+
+.avatar{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    background:linear-gradient(
+        to right,
+        #ff5c93,
+        #b72d65
+    );
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-weight:600;
+    font-size:22px;
+}
+
+.post-user h4{
+    color:#5b2339;
+}
+
+.post-user p{
+    font-size:13px;
+    color:#9a7181;
+}
+
+.post-content{
+    line-height:1.9;
+    color:#613445;
+    margin-bottom:25px;
+}
+
+/* NEW: Uploaded Image style inside the feed post */
+.uploaded-post-img {
+    width: 100%;
+    max-height: 450px;
+    object-fit: cover;
+    border-radius: 18px;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.post-footer{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.action-btn{
+    border:none;
+    padding:12px 18px;
+    border-radius:30px;
+    background:#fff2f6;
+    color:#9a4166;
+    cursor:pointer;
+    transition:0.3s;
+    font-weight:500;
+}
+
+.action-btn:hover{
+    background:#ffd8e7;
+}
+
+/* PROFILE */
+.profile-card{
+    margin-top:60px;
+    border-radius:28px;
+    padding:45px;
+    text-align:center;
+}
+
+.profile-card img{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    object-fit:cover;
+    margin-bottom:20px;
+}
+
+.profile-card h2{
+    color:#b92f66;
+    margin-bottom:12px;
+}
+
+.profile-card p{
+    color:#8d5f72;
+}
+
+/* LOGIN MODAL */
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.45);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:3000;
+}
+
+.modal-content{
+    width:90%;
+    max-width:430px;
+    background:white;
+    border-radius:30px;
+    padding:35px;
+    text-align:center;
+}
+
+.close{
+    float:right;
+    cursor:pointer;
+    font-size:24px;
+}
+
+.modal-content h2{
+    margin-bottom:25px;
+    color:#b92f66;
+}
+
+.input-box{
+    margin-bottom:18px;
+}
+
+.input-box input{
+    width:100%;
+    padding:15px;
+    border:none;
+    background:#fff2f6;
+    border-radius:16px;
+    outline:none;
+}
+
+.login-btn,
+.google-btn{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:40px;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.login-btn{
+    background:linear-gradient(
+        to right,
+        #ff5c93,
+        #c92c6d
+    );
+    color:white;
+    margin-bottom:15px;
+}
+
+.google-btn{
+    background:white;
+    border:1px solid #eee;
+}
+
+/* FOOTER */
+footer{
+    text-align:center;
+    padding:45px;
+    color:#9a6c7d;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+    .logo-text{
+        font-size:40px;
+    }
+
+    .hero h2{
+        font-size:42px;
+    }
+
+    .hero img{
+        width:190px;
+    }
+
+    .nav-links{
+        display:none;
+    }
+
+    .bg-couple{
+        width:550px;
+        height:550px;
+    }
+
+    /* FIX POST ACTIONS */
+    .post-actions{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .left-actions{
+        width:100%;
+        flex-wrap:wrap;
+    }
+
+    .add-img-label{
+        display:inline-block;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-couple"></div>
+
+<input type="file" id="profileUpload" hidden accept="image/*">
+
+<nav class="navbar">
+    <div class="logo">
+        <div class="profile-photo">
+            <img id="profilePreview" src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png">
+        </div>
+        <div class="logo-text">
+            The Meet<span class="heart-icon">♡</span>ry
+        </div>
+    </div>
+
+    <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#feed">Stories</a>
+        <a href="#profile">Profile</a>
+        <a href="#" onclick="openModal()">Login</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <img src="https://res.cloudinary.com/dbislv0nl/image/upload/f_auto,q_auto/the-meetory_w8rdy4.png" alt="The Meetory Logo">
+
+    <h2>Every Meeting Has A Story</h2>
+    <p>
+        Share your first meeting memories with your best friend,
+        boyfriend, girlfriend, family, or anyone special.
+        Meetory is where emotions become timeless stories.
+    </p>
+    <button onclick="document.getElementById('creator').scrollIntoView({behavior:'smooth'})">
+        Start Writing
+    </button>
+</section>
+
+<div class="container">
+
+    <div class="post-box" id="creator">
+        <h3>Write Your Story ✨</h3>
+        <textarea id="storyInput" placeholder="Tell the world how you first met someone special..."></textarea>
+        
+        <div class="post-image-preview-wrapper" id="postImgPreviewWrapper">
+            <button class="remove-img-btn" onclick="clearStoryImage()">×</button>
+            <img id="postImgPreview" src="" alt="Preview">
+        </div>
+
+        <div class="post-actions">
+            <div class="left-actions">
+                <label for="storyImageUpload" class="add-img-label">📸 Add Photo</label>
+                <input type="file" id="storyImageUpload" hidden accept="image/*">
+                <span class="char-count">Unlimited Characters</span>
+            </div>
+            <button class="post-btn" onclick="createPost()">Post Story</button>
+        </div>
+    </div>
+
+    <div class="feed" id="feed">
+        <div class="post">
+            <div class="post-header">
+                <div class="avatar">A</div>
+                <div class="post-user">
+                    <h4>Aarav Sharma</h4>
+                    <p>2 hours ago</p>
+                </div>
+            </div>
+            <div class="post-content">
+                I met my best friend during school assembly when both of us got punished for laughing. Today after 7 years, he is still my strongest support system ❤️
+            </div>
+            <div class="post-footer">
+                <button class="action-btn">❤️ Like</button>
+                <button class="action-btn">💬 Comment</button>
+                <button class="action-btn">🔗 Share</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-card" id="profile">
+        <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" alt="Profile Asset">
+        <h2>Your Meetory Profile</h2>
+        <p>Create your identity, share memories, follow emotional stories and connect with people.</p>
+    </div>
+
+</div>
+
+<div class="modal" id="loginModal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Login to Meetory</h2>
+        <div class="input-box">
+            <input type="text" placeholder="Phone Number or Gmail">
+        </div>
+        <div class="input-box">
+            <input type="password" placeholder="Password">
+        </div>
+        <button class="login-btn">Login / Signup</button>
+        <button class="google-btn">Continue with Google</button>
+    </div>
+</div>
+
+<footer>
+    © 2026 The Meetory — Meeting Stories Made To Be Shared.
+</footer>
+
+<script>
+/* LOGIN MODAL FUNCTIONS */
+function openModal(){
+    document.getElementById('loginModal').style.display='flex';
+}
+function closeModal(){
+    document.getElementById('loginModal').style.display='none';
+}
+
+/* NEW: VARIABLES FOR STORY IMAGE UPLOAD */
+const storyImageUpload = document.getElementById('storyImageUpload');
+const postImgPreviewWrapper = document.getElementById('postImgPreviewWrapper');
+const postImgPreview = document.getElementById('postImgPreview');
+let attachedStoryImageSrc = ""; // Stores the temporary data URL string
+
+// Listens for image upload selection
+storyImageUpload.addEventListener('change', function() {
+    const file = this.files[0];
+    if(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            attachedStoryImageSrc = e.target.result;
+            postImgPreview.src = e.target.result;
+            postImgPreviewWrapper.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+// Clears the selected image
+function clearStoryImage() {
+    storyImageUpload.value = "";
+    attachedStoryImageSrc = "";
+    postImgPreview.src = "";
+    postImgPreviewWrapper.style.display = 'none';
+}
+
+/* CREATE POSTS */
+function createPost(){
+    const input = document.getElementById('storyInput');
+    
+    // Prevent empty posts (allow if there's either text or an image attached)
+    if(input.value.trim() === '' && !attachedStoryImageSrc){
+        alert('Please write a story or upload a photo first!');
+        return;
+    }
+
+    const feed = document.getElementById('feed');
+    const post = document.createElement('div');
+    post.className='post';
+
+    // To prevent layout breakage or malicious tags, escape plain text strings safely
+    const cleanText = input.value.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+    // NEW: Render an image block inside the post if one exists
+    let imageHTML = "";
+    if(attachedStoryImageSrc) {
+        imageHTML = `<img src="${attachedStoryImageSrc}" class="uploaded-post-img" alt="Story Image">`;
+    }
+
+    post.innerHTML = `
+        <div class="post-header">
+            <div class="avatar">Y</div>
+            <div class="post-user">
+                <h4>You</h4>
+                <p>Just now</p>
+            </div>
+        </div>
+        <div class="post-content">
+            ${cleanText}
+        </div>
+        ${imageHTML}
+        <div class="post-footer">
+            <button class="action-btn">❤️ Like</button>
+            <button class="action-btn">💬 Comment</button>
+            <button class="action-btn">🔗 Share</button>
+        </div>
+    `;
+
+    feed.prepend(post);
+    
+    // Reset Form Fields after posting
+    input.value='';
+    clearStoryImage();
+}
+
+/* GLOBAL SHARE INTERACTION */
+document.addEventListener('click',function(e){
+    if(e.target.innerText.includes('Share')){
+        navigator.clipboard.writeText(window.location.href);
+        alert('Story link copied!');
+    }
+});
+
+/* PROFILE PHOTO UPLOAD */
+const uploadInput = document.getElementById('profileUpload');
+const profilePreview = document.getElementById('profilePreview');
+
+document.querySelector('.profile-photo').addEventListener('click',()=>{
+    uploadInput.click();
+});
+f
+uploadInput.addEventListener('change',function(){
+    const file=this.files[0];
+    if(file){
+        const reader=new FileReader();
+        reader.onload=function(e){
+            profilePreview.src=e.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+});
+</script>
+
+</body>
+</html>
